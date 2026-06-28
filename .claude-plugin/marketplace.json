@@ -1,27 +1,25 @@
 {
-  "name": "karpathy-skills",
-  "id": "karpathy-skills",
+  "name": "karpathy-agent-os",
+  "id": "karpathy-agent-os",
   "owner": {
-    "name": "forrestchang"
+    "name": "mauricepfeifer-ctrl"
   },
   "metadata": {
-    "description": "Behavioral guidelines to reduce common LLM coding mistakes, derived from Andrej Karpathy's observations",
-    "version": "1.0.0"
+    "description": "Agent OS Kit turns Karpathy-style coding discipline into a reusable operating layer for coding agents: logs, lessons, failure modes, retros, and safe rule improvement proposals.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "andrej-karpathy-skills",
       "source": "./",
-      "description": "Behavioral guidelines to reduce common LLM coding mistakes: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution",
-      "version": "1.0.0",
+      "description": "Karpathy Agent OS: 5 coding principles + /improve (proposal-only), /retro, /debug, /review, /plan",
+      "version": "2.0.0",
       "author": {
-        "name": "forrestchang"
+        "name": "mauricepfeifer-ctrl"
       },
       "keywords": [
-        "guidelines",
-        "best-practices",
-        "coding",
-        "karpathy"
+        "guidelines", "best-practices", "coding", "karpathy",
+        "agent-os", "self-improvement", "failure-modes"
       ],
       "category": "workflow"
     }

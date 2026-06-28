@@ -1,11 +1,15 @@
 {
   "name": "andrej-karpathy-skills",
-  "description": "Behavioral guidelines to reduce common LLM coding mistakes, derived from Andrej Karpathy's observations on LLM coding pitfalls",
-  "version": "1.0.0",
+  "description": "Karpathy Agent OS Starter Kit — self-improving AI coding system with error capture, failure mode identification, and proposal-only rule improvements",
+  "version": "2.0.0",
   "author": {
-    "name": "forrestchang"
+    "name": "mauricepfeifer-ctrl"
   },
   "license": "MIT",
-  "keywords": ["guidelines", "best-practices", "coding", "karpathy"],
-  "skills": ["./skills/karpathy-guidelines"]
+  "keywords": ["guidelines", "best-practices", "coding", "karpathy", "agent-os", "self-improvement"],
+  "skills": [
+    "./skills/karpathy-guidelines",
+    "./skills/agent-os-core",
+    "./skills/agent-os-prompts"
+  ]
 }
