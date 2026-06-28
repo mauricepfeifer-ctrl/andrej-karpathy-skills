@@ -12,6 +12,12 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+_PERIOD_LABEL = {
+    "daily": "stars today",
+    "weekly": "stars this week",
+    "monthly": "stars this month",
+}
+
 
 def fetch_trending(lang: str = "", since: str = "daily") -> list[dict]:
     url = f"https://github.com/trending/{lang}" if lang else "https://github.com/trending"
@@ -39,12 +45,13 @@ def fetch_trending(lang: str = "", since: str = "daily") -> list[dict]:
         lang_el = article.select_one('[itemprop="programmingLanguage"]')
         language = lang_el.get_text(strip=True) if lang_el else ""
 
-        stars_today = 0
+        # Matches: "1,234 stars today", "567 stars this week", "89 stars this month"
+        stars_period = 0
         for span in article.find_all("span"):
-            text = span.get_text(strip=True)
-            if "stars today" in text or "star today" in text:
+            text = span.get_text(strip=True).lower()
+            if "star" in text and any(c.isdigit() for c in text):
                 digits = "".join(c for c in text.split("star")[0] if c.isdigit())
-                stars_today = int(digits) if digits else 0
+                stars_period = int(digits) if digits else 0
                 break
 
         total_stars = 0
@@ -59,7 +66,7 @@ def fetch_trending(lang: str = "", since: str = "daily") -> list[dict]:
             "url": f"https://github.com/{full_name}",
             "desc": desc,
             "lang": language,
-            "stars_today": stars_today,
+            "stars_period": stars_period,
             "total_stars": total_stars,
         })
 
@@ -89,11 +96,12 @@ def main() -> None:
 
     date_str = datetime.now().strftime("%Y-%m-%d")
     lang_label = f" ({args.lang})" if args.lang else ""
+    period_label = _PERIOD_LABEL[args.since]
     print(f"# Top 10 GitHub Trending{lang_label} — {date_str} ({args.since})\n")
     for i, repo in enumerate(repos, 1):
         lang_tag = f"**{repo['lang']}** · " if repo["lang"] else ""
         print(f"## {i}. [{repo['name']}]({repo['url']})")
-        print(f"{lang_tag}+{repo['stars_today']:,} stars today · {repo['total_stars']:,} total")
+        print(f"{lang_tag}+{repo['stars_period']:,} {period_label} · {repo['total_stars']:,} total")
         if repo["desc"]:
             print(repo["desc"])
         print()

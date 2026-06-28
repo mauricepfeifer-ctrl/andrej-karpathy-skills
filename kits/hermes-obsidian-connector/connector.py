@@ -1,20 +1,33 @@
 """
 Obsidian connector via obsidian-local-rest-api.
 Requires: pip install requests
-Config:   OBSIDIAN_API_KEY env var
-          OBSIDIAN_PORT env var (default: 27124)
+Config:   OBSIDIAN_API_KEY  env var (required)
+          OBSIDIAN_PORT     env var (default: 27124)
+          OBSIDIAN_SCHEME   env var (default: https)
+          OBSIDIAN_SSL_VERIFY env var (default: false — self-signed cert)
 """
 import os
+import urllib3
 import requests
 
-_BASE = f"http://localhost:{os.getenv('OBSIDIAN_PORT', '27124')}"
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+_SCHEME = os.getenv("OBSIDIAN_SCHEME", "https")
+_BASE = f"{_SCHEME}://localhost:{os.getenv('OBSIDIAN_PORT', '27124')}"
 _HEADERS = {
     "Authorization": f"Bearer {os.getenv('OBSIDIAN_API_KEY', '')}",
 }
+_VERIFY = os.getenv("OBSIDIAN_SSL_VERIFY", "false").lower() == "true"
 
 
-def _get(path: str) -> requests.Response:
-    return requests.get(f"{_BASE}/{path.lstrip('/')}", headers=_HEADERS, timeout=10)
+def _get(path: str, params: dict | None = None) -> requests.Response:
+    return requests.get(
+        f"{_BASE}/{path.lstrip('/')}",
+        headers=_HEADERS,
+        params=params,
+        verify=_VERIFY,
+        timeout=10,
+    )
 
 
 def _put(path: str, content: str) -> requests.Response:
@@ -23,18 +36,14 @@ def _put(path: str, content: str) -> requests.Response:
         f"{_BASE}/{path.lstrip('/')}",
         headers=h,
         data=content.encode("utf-8"),
+        verify=_VERIFY,
         timeout=10,
     )
 
 
-def _post(path: str, payload: dict) -> requests.Response:
-    h = {**_HEADERS, "Content-Type": "application/json"}
-    return requests.post(f"{_BASE}/{path.lstrip('/')}", headers=h, json=payload, timeout=10)
-
-
 def search(query: str) -> list[dict]:
     """Search vault. Returns list of {filename, score, matches}."""
-    resp = _post("search/simple/", {"query": query, "contextLength": 100})
+    resp = _get("search/simple/", params={"query": query, "contextLength": 100})
     resp.raise_for_status()
     return resp.json()
 

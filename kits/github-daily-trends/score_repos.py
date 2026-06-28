@@ -22,10 +22,11 @@ RELEVANCE = {
 def score(repo: dict) -> int:
     text = f"{repo['name']} {repo['desc']}".lower()
     points = sum(w for kw, w in RELEVANCE.items() if kw in text)
-    today = repo.get("stars_today", 0)
-    if today > 500:
+    # Use stars_period (renamed from stars_today to support weekly/monthly)
+    period = repo.get("stars_period", repo.get("stars_today", 0))
+    if period > 500:
         points += 2
-    elif today > 200:
+    elif period > 200:
         points += 1
     return points
 
@@ -34,9 +35,10 @@ def integration_block(repo: dict, relevance: int, rank: int) -> str:
     name = repo["name"]
     short = name.split("/")[-1]
     lang = repo.get("lang") or "N/A"
+    period = repo.get("stars_period", repo.get("stars_today", 0))
     return "\n".join([
         f"### {rank}. [{name}]({repo['url']}) — Relevanz {relevance}",
-        f"**{lang}** · +{repo['stars_today']:,} Stars heute · {repo['total_stars']:,} gesamt",
+        f"**{lang}** · +{period:,} Stars · {repo['total_stars']:,} gesamt",
         repo["desc"],
         "",
         "**Integration:**",
