@@ -5,25 +5,21 @@
     "name": "mauricepfeifer-ctrl"
   },
   "metadata": {
-    "description": "Stop collecting AI knowledge. Install a system that applies it, measures results, and learns from mistakes.",
+    "description": "Agent OS Kit turns Karpathy-style coding discipline into a reusable operating layer for coding agents: logs, lessons, failure modes, retros, and safe rule improvement proposals.",
     "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "andrej-karpathy-skills",
       "source": "./",
-      "description": "Karpathy Agent OS: 5 coding principles + /improve (auto rule updates), /solve (structured debugging), /setup (project init)",
+      "description": "Karpathy Agent OS: 5 coding principles + /improve (proposal-only), /retro, /debug, /review, /plan",
       "version": "2.0.0",
       "author": {
         "name": "mauricepfeifer-ctrl"
       },
       "keywords": [
-        "guidelines",
-        "best-practices",
-        "coding",
-        "karpathy",
-        "agent-os",
-        "self-improvement"
+        "guidelines", "best-practices", "coding", "karpathy",
+        "agent-os", "self-improvement", "failure-modes"
       ],
       "category": "workflow"
     }

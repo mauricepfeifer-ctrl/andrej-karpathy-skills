@@ -1,117 +1,123 @@
 ---
 name: agent-os-core
-description: Karpathy Agent OS — self-improving coding system. Extends the 4 core principles with a continuous error-capture and rule-update loop. A mistake is only processed when the system prevents it next time.
+description: Agent OS Core — operating rules for AI-assisted coding. Logs errors, identifies failure modes, extracts lessons, and proposes rule changes. All rule promotions require human approval. Built on Karpathy Guidelines.
 license: MIT
 ---
 
 # Agent OS Core
 
-Self-improving behavioral system for AI-assisted coding. Built on Karpathy's 4 principles — adds systematic error capture and autonomous rule evolution.
+Operating layer for AI-assisted coding agents. Transforms one-off corrections into systematic improvement — with human approval at every step.
 
-**The invariant:** A mistake is only processed when the system prevents it next time.
-
-## The Loop
-
-```
-WORK → error occurs → capture in ERROR_LOG.md → run /improve → rules updated → error prevented next time
-```
+**Relationship to Karpathy Guidelines:** Karpathy Guidelines define coding discipline (how to write code). Agent OS Core defines operating discipline (how to work, log, learn, and improve). They stack; neither weakens the other.
 
 ---
 
-## 1. Think Before Coding
+## Purpose
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+- Log errors and decisions as they happen
+- Identify recurring failure modes from error patterns
+- Extract verified lessons from failures
+- Propose rule changes for human review
+- Track what changed, why, and when
 
-- State assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them — don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+## When to Use
 
-## 2. Simplicity First
+- When starting work in a project using Agent OS
+- When an error occurs and needs to be captured
+- When preparing a `/improve` or `/retro` run
+- When reviewing patterns across sessions
 
-**Minimum code that solves the problem. Nothing speculative.**
+## When NOT to Use
 
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" that wasn't requested.
-- No error handling for impossible scenarios.
-- If 200 lines could be 50, rewrite it.
+- Do not use to bypass or weaken Karpathy Guidelines
+- Do not log private, legal, or secret data
+- Do not use to auto-promote rules without human approval
+- Do not run autonomously without human oversight
 
-The test: Would a senior engineer say this is overcomplicated? If yes, simplify.
+---
 
-## 3. Surgical Changes
+## Required Inputs
 
-**Touch only what you must. Clean up only your own mess.**
+- Project working directory
+- `ERROR_LOG.md` (or empty on first session)
+- `LESSONS_LEARNED.md` (or empty)
+- `DECISION_LOG.md` (or empty)
+- `FAILURE_MODES.md` (or empty)
+- Current task context
 
-- Don't improve adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it — don't delete it.
-- Remove only what YOUR changes made unused.
+## Output Artifacts
 
-The test: Every changed line should trace directly to the user's request.
+- Updated `ERROR_LOG.md` (new entries appended)
+- Updated `DECISION_LOG.md` (decisions captured)
+- `RULE_CHANGE_PROPOSAL.md` (proposals only — never applied automatically)
+- Updated `SELF_IMPROVEMENT_LOOP.md` (current loop state)
 
-## 4. Goal-Driven Execution
+---
 
-**Define success criteria. Loop until verified.**
+## Core Rules
 
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-
-For multi-step tasks, state a plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-```
-
-## 5. Self-Improvement Loop
-
-**Capture every mistake. Extract every lesson. Never repeat.**
-
-When you make a mistake or the user corrects you:
-1. Note what happened and what should have happened
-2. Classify: ASSUMPTION | COMPLEXITY | SCOPE_CREEP | WRONG_TOOL | MISSED_CONTEXT
-3. Ask the user: "This looks like a pattern worth capturing. Log it to ERROR_LOG.md?"
-
-When the user runs `/improve`:
-- Analyze ERROR_LOG.md for patterns
-- Propose concrete rule updates
-- Apply on confirmation, log to RULE_UPDATE_LOG.md
-
-When the user runs `/solve [problem]`:
-- Apply structured hypothesis loop
-- Document solution in SOLUTION_LOOP_CARD.md
-- Extract lesson if it's a recurring pattern
-
-When the user runs `/setup`:
-- Create all Agent OS tracking files in the current project
+1. **Errors are logged.** Every mistake captured in `ERROR_LOG.md` immediately.
+2. **Recurring errors become Failure Modes.** Same root cause 2+ times → entry in `FAILURE_MODES.md`.
+3. **Lessons require verification.** No lesson is final until a human confirms it.
+4. **Rule changes are proposed, not applied.** `RULE_CHANGE_PROPOSAL.md` only.
+5. **No autonomous rule promotion.** Human approval required before any rule enters `CLAUDE.md` or `AGENTS.md`.
+6. **No private/legal/secret data in logs.** Sanitize before writing.
+7. **No changes to productive configs.** `CLAUDE.md`, `AGENTS.md`, Hermes/OpenClaw configs are read-only without explicit human approval.
+8. **Karpathy Guidelines are never weakened.** Agent OS extends them; never replaces or dilutes them.
 
 ---
 
 ## Error Capture Format
 
-When capturing an error to ERROR_LOG.md, use this format:
+When an error occurs, append to `ERROR_LOG.md`:
 
 ```
 ## [YYYY-MM-DD] [CATEGORY]
-**What happened:** ...
-**What should have happened:** ...
-**Root cause:** ...
-**Proposed rule:** ...
+**Task:** [what were you working on]
+**What happened:** [observable mistake]
+**What should have happened:** [correct behavior]
+**Root cause hypothesis:** [your best guess]
+**Proposed lesson:** [what rule might prevent this]
+**Status:** OPEN
 ```
 
-## Project Files
+Categories: `ASSUMPTION` | `COMPLEXITY` | `SCOPE_CREEP` | `WRONG_TOOL` | `MISSED_CONTEXT` | `PLANNING` | `OTHER`
 
-This system uses these files in your project root:
+## Failure Mode Promotion
 
-| File | Purpose |
-|------|---------|
-| `ERROR_LOG.md` | Raw error captures |
-| `LESSONS_LEARNED.md` | Distilled lessons from processed errors |
-| `RULE_UPDATE_LOG.md` | History of every rule change |
-| `IMPROVEMENT_BACKLOG.md` | Proposed improvements not yet applied |
-| `VERSION_LOG.md` | System version and improvement history |
-| `SOLUTION_LOOP_CARD.md` | Documented problem-solution pairs |
+When the same root cause appears 2+ times in `ERROR_LOG.md`:
 
-Run `/setup` to initialize these files if they don't exist yet.
+1. Create or update entry in `FAILURE_MODES.md`
+2. Link source error entries
+3. Flag for `/improve` review
+4. Do NOT auto-update `CLAUDE.md`
+
+## Human Approval Rules
+
+Before any rule enters productive configs:
+
+1. `RULE_CHANGE_PROPOSAL.md` must contain the exact proposed change
+2. Risk assessment must be documented
+3. Human must respond: `APPROVED` / `REJECTED` / `DEFER`
+4. Only after `APPROVED`: human manually applies the change
+
+## Failure Mode Handling
+
+If this skill produces uncertain output:
+- Stop and report: "Agent OS Core uncertain. Human review required."
+- Do not proceed with rule promotion
+- Log the uncertainty to `ERROR_LOG.md`
+
+## Rule Promotion Policy
+
+```
+ERROR_LOG.md (capture)
+  → FAILURE_MODES.md (pattern: 2+ occurrences)
+  → LESSONS_LEARNED.md (lesson drafted and human-verified)
+  → RULE_CHANGE_PROPOSAL.md (exact patch proposed)
+  → Human APPROVED
+  → Human manually applies to CLAUDE.md / AGENTS.md
+  → CHANGELOG_AGENT.md updated
+```
+
+No step can be skipped. No step is automated past "proposal."
