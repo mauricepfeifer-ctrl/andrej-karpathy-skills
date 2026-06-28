@@ -1,15 +1,16 @@
 {
   "name": "andrej-karpathy-skills",
-  "description": "Karpathy Agent OS Starter Kit — self-improving AI coding system with error capture, failure mode identification, and proposal-only rule improvements",
-  "version": "2.0.0",
+  "description": "Karpathy Agent OS Starter Kit — self-improving AI coding system with error capture, failure mode identification, proposal-only rule improvements, and project registry to prevent rebuilding what already exists",
+  "version": "2.1.0",
   "author": {
     "name": "mauricepfeifer-ctrl"
   },
   "license": "MIT",
-  "keywords": ["guidelines", "best-practices", "coding", "karpathy", "agent-os", "self-improvement"],
+  "keywords": ["guidelines", "best-practices", "coding", "karpathy", "agent-os", "self-improvement", "project-registry"],
   "skills": [
     "./skills/karpathy-guidelines",
     "./skills/agent-os-core",
-    "./skills/agent-os-prompts"
+    "./skills/agent-os-prompts",
+    "./skills/project-registry"
   ]
 }

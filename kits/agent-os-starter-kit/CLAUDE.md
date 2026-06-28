@@ -55,8 +55,7 @@ Don't just fix and move on — the pattern is the problem.
 ### 6. Propose, Don't Apply
 
 Rule changes go to `RULE_CHANGE_PROPOSAL.md`.
-They are never applied automatically.
-Human approval and manual application are required.
+Never applied automatically. Human approval and manual application required.
 
 ### 7. Patterns Before Rules
 
@@ -65,8 +64,31 @@ Single errors are captured but not promoted.
 
 ### 8. Human Approval is Final
 
-No rule enters this file without explicit human approval.
-No exception.
+No rule enters this file without explicit human approval. No exception.
+
+---
+
+## Project Registry — Before Building Anything
+
+### 9. Check Before Starting
+
+Before proposing or starting any new project, module, or system:
+
+1. Read `PROJECTS.md`
+2. If something `INCOMPLETE` or `OPERATIONAL` already covers this use case: report it and ask whether to finish that first
+3. Only after explicit decision: proceed with new work
+4. When new work starts: add entry to `PROJECTS.md` before writing code
+
+### 10. Finish Before Starting
+
+If `PROJECTS.md` contains `**PRIORITY**` INCOMPLETE projects:
+- Mention them at the start of the session
+- Only start new projects after explicitly acknowledging the incomplete ones
+
+### 11. OPERATIONAL Means Actually Working
+
+A project is OPERATIONAL only when it runs, produces correct output, and has been used for its actual purpose.
+"It could work" is not OPERATIONAL.
 
 ---
 
